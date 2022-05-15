@@ -5,10 +5,14 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgCreatePost } from "./types/blog/tx";
+import { MsgDeleteComment } from "./types/blog/tx";
+import { MsgCreateComment } from "./types/blog/tx";
 
 
 const types = [
   ["/amedumer.blog.blog.MsgCreatePost", MsgCreatePost],
+  ["/amedumer.blog.blog.MsgDeleteComment", MsgDeleteComment],
+  ["/amedumer.blog.blog.MsgCreateComment", MsgCreateComment],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -42,6 +46,8 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
     msgCreatePost: (data: MsgCreatePost): EncodeObject => ({ typeUrl: "/amedumer.blog.blog.MsgCreatePost", value: MsgCreatePost.fromPartial( data ) }),
+    msgDeleteComment: (data: MsgDeleteComment): EncodeObject => ({ typeUrl: "/amedumer.blog.blog.MsgDeleteComment", value: MsgDeleteComment.fromPartial( data ) }),
+    msgCreateComment: (data: MsgCreateComment): EncodeObject => ({ typeUrl: "/amedumer.blog.blog.MsgCreateComment", value: MsgCreateComment.fromPartial( data ) }),
     
   };
 };
